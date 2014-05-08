@@ -1,0 +1,126 @@
+<html>
+    <head>
+        <title>Demo: Facebook Album</title>
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.0/jquery.min.js">
+        </script>
+        <script src="/js/galleria/galleria-1.3.5.min.js">
+        </script>
+        <script src="/js/galleria/plugins/facebook/galleria.facebook.js">
+        </script>
+        <link href="/js/galleria/flipcarousel/flip-carousel.css" rel="stylesheet">
+        <link href="/css/demo.css" rel="stylesheet">
+        <script src="/js/galleria/flipcarousel/flip-carousel.js">
+        </script>
+        <script src="/js/demo.js">
+        </script>
+    </head>
+    <body>
+        <div style="width: 100%;" align="center">
+            <div class="logindiv" align="center" valign="middle" style="float: left; ">
+                <table border="0" width="210px">
+                    <tr class="testdiv">
+                        <th class="header2">
+                            Social Network Photo Albums
+                        </th>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="userdiv" border="1">
+                                <table>
+                                    <tr>
+                                        <td rowspan=1 class="title1">
+                                            Facebook<!--
+                                            Below we include the Login Button social plugin. This button uses
+                                            the JavaScript SDK to present a graphical Login button that triggers
+                                            the FB.login() function when clicked.
+                                            -->
+                                            <fb:login-button scope="public_profile,email" onlogin="checkLoginState();" id="fb_button">
+                                            </fb:login-button>
+                                            <div id="status">
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                    </tr>
+                                </table>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="userdiv" border="1">
+                                <table>
+                                    <tr>
+                                        <td rowspan=1 class="title1">
+                                            Albums<a href="#"><img class="myimage" src="/images/album.png" width="25px" height="25px" onclick="checkLoginState()">
+                                                </img></a>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="userdiv" border="1">
+                                <table>
+                                    <tr>
+                                        <td rowspan=1 class="title1">
+                                            Logout<a href="#"><img class="myimage" src="/images/logout.png" width="25px" height="25px" onclick="fbLogout()">
+                                                </img></a>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="userdiv" border="1">
+                                <table>
+                                    <tr>
+                                        <td rowspan=1 class="title1">
+                                            Instagram
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td rowspan=1 class="title2">
+                                            Coming soon ...
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="userdiv" border="1">
+                                <table>
+                                    <tr>
+                                        <td rowspan=1 class="title1">
+                                            Google Plus (+)
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td rowspan=1 class="title2">
+                                            Coming soon ...
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="galleria" id="alb" style="display:block">
+            </div>
+        </div>
+        <script>
+        </script>
+        <div  align="center" valign="middle" >
+            <p>
+                Posted by: Nilesh More for demo purpose only
+            </p>
+        </div>
+    </body>
+</html>

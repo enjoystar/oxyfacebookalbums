@@ -1,0 +1,11 @@
+.galleria-thumb-nav-left,.galleria-thumb-nav-right,.galleria-info-link,.galleria-info-close,.galleria-image-nav-left,.galleria-image-nav-right{
+	background-image: url(classic-map.gif);
+}
+
+.galleria-stage{
+	width:500px;
+	height:350px;
+}
+.galleria-thumbnails-container {
+	width: 500px;
+}

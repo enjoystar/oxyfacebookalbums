@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Facebook Login JavaScript Example</title>
+        <meta charset="UTF-8">
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.js">
+        </script>
+        <script src="/galleria/plugins/facebook/galleria.facebook.js">
+        </script>
+        <script src="/galleria/galleria-1.3.5.min.js">
+        </script>
+    </head>
+    <body>
+        <style>
+            .header2 {
+                font-family: Arial, Helvetica, sans-serif;
+                font-size: 13px;
+                color: #FFFFFF;
+            }
+            
+            .title1 {
+                font-family: Arial, Helvetica, sans-serif;
+                font-size: 12px;
+                color: #585858;
+                font-weight: bold;
+            }
+            
+            .title2 {
+                font-family: Arial, Helvetica, sans-serif;
+                font-size: 12px;
+                color: #5882FA;
+            }
+            
+            .galleria {
+                width: 700px;
+                height: 400px;
+                background: #000
+            }
+            
+            .logindiv {
+                width: 220px;
+                height: 400px;
+                background-color: #FFFFFF;
+                margin-left: 25px;
+                margin-top: 0px;
+                margin-bottom: 0px;
+                border: 1px solid #336699;
+            }
+            
+            .testdiv {
+                background-color: #336699;
+                border: 2px solid #336699;
+                height: 50px;
+            }
+            
+            .userdiv {
+                border: 1px solid #bcc6cc;
+                height: 40px;
+                margin-top: 2px;
+            }
+        </style>
+        <script>
+            // This is called with the results from from FB.getLoginStatus().
+            function statusChangeCallback(response){
+                console.log('statusChangeCallback');
+                console.log(response);
+                // The response object is returned with a status field that lets the
+                // app know the current login status of the person.
+                // Full docs on the response object can be found in the documentation
+                // for FB.getLoginStatus().
+                if (response.status === 'connected') {
+                    // Logged into your app and Facebook.
+                    //testAPI();
+					document.getElementById("alb").innerHTML = "";
+                    getAlbums();
+                    document.getElementById('alb').style.display = 'block';
+                    document.getElementById("fb_button").style.visibility = "hidden";
+                    document.getElementById("status").innerHTML = "";
+                }
+                else 
+                    if (response.status === 'not_authorized') {
+                        // The person is logged into Facebook, but not your app.
+                        document.getElementById('status').innerHTML = 'Please log ' +
+                        'into this app.';
+                    }
+                    else {
+                        // The person is not logged into Facebook, so we're not sure if
+                        // they are logged into this app or not.
+                        document.getElementById('status').innerHTML = 'Please log ' +
+                        'into Facebook.';
+                    }
+            }
+            
+            // This function is called when someone finishes with the Login
+            // Button.  See the onlogin handler attached to it in the sample
+            // code below.
+            function checkLoginState(){
+                FB.getLoginStatus(function(response){
+                    statusChangeCallback(response);
+                });
+            }
+            
+            window.fbAsyncInit = function(){
+                FB.init({
+                    appId: 1386458058305302,
+                    cookie: true, // enable cookies to allow the server to access 
+                    // the session
+                    xfbml: true, // parse social plugins on this page
+                    version: 'v2.0' // use version 2.0
+                });
+                
+                // Now that we've initialized the JavaScript SDK, we call 
+                // FB.getLoginStatus().  This function gets the state of the
+                // person visiting this page and can return one of three states to
+                // the callback you provide.  They can be:
+                //
+                // 1. Logged into your app ('connected')
+                // 2. Logged into Facebook, but not your app ('not_authorized')
+                // 3. Not logged into Facebook and can't tell if they are logged into
+                //    your app or not.
+                //
+                // These three cases are handled in the callback function.
+                
+                FB.getLoginStatus(function(response){
+                    statusChangeCallback(response);
+                });
+                
+            };
+            
+            // Load the SDK asynchronously
+            (function(d, s, id){
+                var js, fjs = d.getElementsByTagName(s)[0];
+                if (d.getElementById(id)) 
+                    return;
+                js = d.createElement(s);
+                js.id = id;
+                js.src = "//connect.facebook.net/en_US/sdk.js";
+                fjs.parentNode.insertBefore(js, fjs);
+            }(document, 'script', 'facebook-jssdk'));
+            
+            // Here we run a very simple test of the Graph API after login is
+            // successful.  See statusChangeCallback() for when this call is made.
+            function testAPI(){
+                console.log('Welcome!  Fetching your information.... ');
+                FB.api('/me/albums', {
+                    fields: 'id,name'
+                }, function(response){
+                
+                    console.log("album called");
+                    console.log("len = " + response.data.length);
+                    for (var i = 0; i < response.data.length; i++) {
+                        var album = response.data[i];
+                        console.log('album, ' + album.id + '.');
+                        console.log('album name, ' + album.name + '.');
+                        
+                        if (album.name != 'Profile Pictures') {
+                            getPhotosForAlbumId(album.id);
+                            //break;
+                        }
+                    }
+                });
+                
+            }
+            
+            function getAlbums(){
+                console.log('*** getAlbums() ***');
+                FB.api('/me/albums', {
+                    fields: 'id,name,cover_photo,link'
+                }, function(response){
+                
+                    console.log("getAlbums(): album called");
+                    console.log("getAlbums(): len = " + response.data.length);
+                    //document.getElementById("alb").innerHTML = "";
+                    for (var i = 0; i < response.data.length; i++) {
+                        var album = response.data[i];
+                        
+                        
+                        if (album.name != 'Profile Pictures') {
+                            console.log('getAlbums(): album name, ' + album.name + '.');
+                            console.log('getAlbums(): album Id, ' + album.id + '.');
+                            console.log('getAlbums(): album cover_photo, ' + album.cover_photo + '.');
+                            
+                            getAlbumCoverPhoto1(album);
+                            //                            FB.api('/' + album.cover_photo, function(photo){
+                            //                                console.log('getAlbums(): got photos for album ' + album.cover_photo);
+                            //                                
+                            //                                //var photo = photos['picture'];
+                            //                                // photo.picture contain the link to picture
+                            //                                console.log('getAlbums(): photo.picture = ' + photo.picture + '.');
+                            //                                
+                            //                                var image = document.createElement('img');
+                            //                                image.src = photo.picture;
+                            //                                image.id = album.cover_photo
+                            //                                console.log('getAlbums(): image.id = ' + image.id + '.');
+                            //                                
+                            //                                
+                            //                                /*image.onclick = function(){
+                            //                                 //getPhotosForAlbumId(album.id)
+                            //                                 getPhotosForAlbumId(this.id);
+                            //                                 };*/
+                            //                                image.onclick = getPhotosForAlbumId
+                            //                                //image.onmouseover = mouseOver
+                            //                                document.getElementById('alb').appendChild(image);
+                            //                                
+                            //                            });
+                        
+                            //break;
+                        }
+                    }
+                    
+                    
+                });
+                //Galleria.loadTheme('/galleria/themes/classic/galleria.classic.min.js');
+                //Galleria.run('.galleria');
+                
+            }
+            
+            function getAlbumCoverPhoto1(album){
+                //getAlbumCoverPhoto(album.cover_photo);
+                FB.api('/' + album.cover_photo, function(photo){
+                    console.log('getAlbums(): got photos for album ' + album.cover_photo);
+                    
+                    //var photo = photos['picture'];
+                    // photo.picture contain the link to picture
+                    console.log('getAlbums(): photo.picture = ' + photo.picture + '.');
+                    
+                    var image = document.createElement('img');
+                    image.src = photo.picture;
+                    image.id = album.cover_photo
+                    console.log('getAlbums(): image.id = ' + image.id + '.');
+                    
+                    
+                    image.onclick = function(){
+                        document.getElementById("alb").innerHTML = "";
+                        getPhotosForAlbumId(album.id)
+                        //getPhotosForAlbumId(this.id);
+                    };
+                    //image.onclick = getPhotosForAlbumId
+                    //image.onmouseover = mouseOver
+                    document.getElementById('alb').appendChild(image);
+                    
+                });
+            }
+            
+            function mouseOver(e){
+                alert(this.id);
+            }
+            
+            function getAlbumCoverPhoto(albumId){
+                console.log("*** getAlbumCoverPhoto() ***");
+                FB.api('/' + albumId, function(photo){
+                    console.log('getAlbumCoverPhoto():  got photos for album ' + albumId);
+                    
+                    //var photo = photos['picture'];
+                    // photo.picture contain the link to picture
+                    
+                    console.log('getAlbumCoverPhoto(): photo.url = ' + photo.url + '.');
+                    console.log('getAlbumCoverPhoto(): photo.picture = ' + photo.picture + '.');
+                    console.log('getAlbumCoverPhoto(): photo.src = ' + photo.src + '.');
+                    console.log('getAlbumCoverPhoto(): photo.source = ' + photo.src + '.');
+                    
+                    var image = document.createElement('img');
+                    image.src = photo.picture;
+                    
+                    document.getElementById('alb').appendChild(image);
+                });
+            }
+            
+            
+            function getPhotosForAlbumId(albumId){
+                //document.getElementById("alb").innerHTML = "";
+                console.log("*** getPhotosForAlbumId() ***");
+                FB.api('/' + albumId + '/photos', function(photos){
+                    console.log('getPhotosForAlbumId(): got photos for album ' + albumId);
+                    
+                    if (photos && photos.data && photos.data.length) {
+                        for (var j = 0; j < photos.data.length; j++) {
+                            var photo = photos.data[j];
+                            // photo.picture contain the link to picture
+                            
+                            console.log('getPhotosForAlbumId(): photo.picture = ' + photo.picture + '.');
+                            var image = document.createElement('img');
+                            image.src = photo.picture;
+                            document.getElementById('alb').appendChild(image);
+                        }
+                    }
+                });
+            }
+            
+            
+            
+            function fbLogout(){
+                FB.getLoginStatus(function(response){
+                    if (response && response.status === 'connected') {
+                        FB.logout(function(response){
+                            document.location.reload();
+                        });
+                    }
+                });
+            }
+        </script>
+        <div style="width: 100%;" align="center">
+        <div class="logindiv" align="center" valign="middle" style="float: left; ">
+            <table border="0" width="210px">
+                <tr class="testdiv">
+                    <th class="header2">
+                        Social Network Photo Albums
+                    </th>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="userdiv" border="1">
+                            <table>
+                                <tr>
+                                    <td rowspan=1 class="title1">
+                                        Facebook<!--
+                                        Below we include the Login Button social plugin. This button uses
+                                        the JavaScript SDK to present a graphical Login button that triggers
+                                        the FB.login() function when clicked.
+                                        -->
+                                        <fb:login-button scope="public_profile,email" onlogin="checkLoginState();" id="fb_button">
+                                        </fb:login-button>
+                                        <div id="status">
+                                        </div>
+                                        <span id="fbLogout" onclick="fbLogout()"><a class="fb_button fb_button_medium"><span class="fb_button_text">Logout</span></a></span>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="userdiv" border="1">
+                            <table>
+                                <tr>
+                                    <td rowspan=1 class="title1">
+                                        Instagram
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td rowspan=1 class="title2">
+                                        Coming soon ...
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="userdiv" border="1">
+                            <table>
+                                <tr>
+                                    <td rowspan=1 class="title1">
+                                        Google Plus (+)
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td rowspan=1 class="title2">
+                                        Coming soon ...
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="galleria" id="alb" style="display:block">
+        </div>
+        <script>
+            Galleria.loadTheme('galleria/themes/classic/galleria.classic.min.js');
+            Galleria.run('.galleria');
+        </script>
+    </body>
+</html>
